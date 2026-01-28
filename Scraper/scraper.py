@@ -67,22 +67,16 @@ def scrape_zone():
                         title_tag = p.find('h4', class_='content-title')
                         title = title_tag.get_text(strip=True) if title_tag else "N/A"
 
-                        # --- SMART LOCATION FINDER ---
-                        # Attempt 1: Look for the standard 'address' tag
                         loc_tag = p.find('address') 
-
-                        # Attempt 2: If that fails, look for the text inside the content block
                         if not loc_tag:
                             content_div = p.find('div', class_='wp-block-content')
                             if content_div:
                                 loc_tag = content_div.find('strong')
 
-                        # Save result
                         if loc_tag:
                             location = loc_tag.get_text(strip=True)
                         else:
                             location = "N/A" 
-                        # -----------------------------
                         
                         price_span = p.find('span', class_='pull-sm-left')
                         price = price_span.get_text(strip=True) if price_span else "0"
@@ -139,5 +133,13 @@ def scrape_zone():
 if __name__ == "__main__":
     while True:
         scrape_zone()
-        print("\nBatch finished! Resting for 10 seconds...")
-        time.sleep(10)
+        
+        print("-" * 30)
+        choice = input("Batch finished! Type 'y' to continue or 'n' to stop: ")
+        
+        if choice.lower() != 'y':
+            print("Stopping script. Your data is saved.")
+            break
+            
+        print("Continuing to next batch...")
+        time.sleep(2)
